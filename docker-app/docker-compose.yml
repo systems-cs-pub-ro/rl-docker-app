@@ -1,0 +1,72 @@
+version: '3'
+services:
+
+  ##### MySQL #####
+  rl_database:
+
+    image: mysql
+    restart: always
+    privileged: true
+
+    networks:
+      rl-network:
+        ipv4_address: 192.168.200.3
+
+    environment:
+        - MYSQL_DATABASE=rl-database
+        - MYSQL_USER=rl-user
+        - MYSQL_PASSWORD=rl-specialpassword
+        - MYSQL_ROOT_PASSWORD=root
+        - TZ=Europe/Bucharest
+
+    ports:
+        - 3306:3306
+
+    volumes:
+        - /var/rl-app/db-volume:/var/lib/mysql
+
+    container_name: rl_database
+    hostname: rl_database
+
+
+  ##### Flask #####
+  rl_backend:
+
+    networks:
+      rl-network:
+        ipv4_address: 192.168.200.4
+
+    restart: always
+    container_name: rl_backend
+    hostname: rl_backend
+
+    entrypoint: /home/rl-user/init.sh
+
+    depends_on:
+        - rl_database
+
+    build:
+      context: ./backend-context/
+      args:
+        - flask_port=5000
+
+    ports:
+        - 5000:5000
+
+    environment:
+        - FLASK_APP='app'
+        - FLASK_PORT=5000
+        - DB_USER=rl-user
+        - DB_PASSWORD=rl-specialpassword
+        - DB_SERVER=192.168.200.3
+        - DB_NAME=rl-database
+
+
+### Networks ###
+networks:
+  rl-network:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.200.0/24
