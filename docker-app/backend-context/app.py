@@ -80,7 +80,10 @@ def get_image_likes():
 @app.route('/rl-rules/image', methods=['GET'])
 def get_image():
 
-    image_name = request.args.get('name')
+    image_id = request.args.get('id')
+
+    image = Image.query.filter_by(id=image_id).first()
+    image_name = image.name
 
     try:
         return send_from_directory(DIR_PATH, filename=image_name)
@@ -96,6 +99,7 @@ def get_images_list():
 
     return json.dumps([
         {
+            "id": image.id,
             "name": image.name,
             "likesCount": image.likes_count,
             "publicationDate": str(image.pub_date),
