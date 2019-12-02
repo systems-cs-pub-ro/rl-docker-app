@@ -9,6 +9,7 @@ from datetime import datetime
 
 from flask import Flask
 from flask import request
+from flask import jsonify
 from flask import send_from_directory
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
@@ -40,7 +41,7 @@ class Image(db.Model):
     likes_count = db.Column(db.Integer, default=0)
 
 
-@app.route('/rl-rules/upload/image', methods=['POST'])
+@app.route('/api/upload/image', methods=['POST'])
 def upload_image():
     """
     Upload a new image.
@@ -56,10 +57,10 @@ def upload_image():
     return json.dumps({"status": "succes"})
 
 
-@app.route('/rl-rules/image/like', methods=['POST'])
+@app.route('/api/image/like', methods=['POST'])
 def like_image():
 
-    image_name = request.form.get('name')
+    image_name = request.json['name']
         
     image = Image.query.filter_by(name=image_name).first()
     image.likes_count += 1
@@ -68,16 +69,16 @@ def like_image():
     return json.dumps({"status": "succes"})
 
 
-@app.route('/rl-rules/image/likes', methods=['GET'])
+@app.route('/api/image/likes', methods=['GET'])
 def get_image_likes():
 
     image_name = request.args.get('name')
     image = Image.query.filter_by(name=image_name).first()
 
-    return json.dumps(image.likes_count)
+    return jsonify(image.likes_count)
 
 
-@app.route('/rl-rules/image', methods=['GET'])
+@app.route('/api/image', methods=['GET'])
 def get_image():
 
     image_id = request.args.get('id')
@@ -91,13 +92,13 @@ def get_image():
         abort(404)
 
 
-@app.route('/rl-rules/images', methods=['GET'])
+@app.route('/api/images', methods=['GET'])
 def get_images_list():
     """
     Return the list of images.
     """
 
-    return json.dumps([
+    return jsonify([
         {
             "id": image.id,
             "name": image.name,

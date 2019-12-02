@@ -1,0 +1,29 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto|Satisfy&display=swap');
+
+html,
+body,
+#root {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+
+  background-color: #EAEAEA;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  *:not(h1) {
+    font-family: 'Roboto', sans-serif;
+  }
+}
+
+section {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 10px;
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+
+}
