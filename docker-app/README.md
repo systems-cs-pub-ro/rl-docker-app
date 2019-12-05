@@ -21,5 +21,11 @@ flask db upgrade
 ##### 4. Start Flask
 ```
 # In `backend-context` directory
-python3 app.py
+python3 run.py
+```
+
+##### 5. Swarm
+```
+# In order to retrieve the backend node in GUI you should set the environment variable
+# named `BACKEND_NODE` inside the container.
 ```

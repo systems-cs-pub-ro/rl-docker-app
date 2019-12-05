@@ -124,7 +124,15 @@ def get_images_list():
 
 @app.route('/api/backendNode', methods=['GET'])
 def get_backend_node():
-    return jsonify({"backendNode": "FIRST_NODE"})
+    """
+    Return the backend node that is executing the request.
+    """
+
+    backend_node = os.environ.get("BACKEND_NODE")
+    if not backend_node:
+        backend_node = "FIRST NODE"
+
+    return jsonify({"backendNode": backend_node})
 
 
 if __name__ == '__main__':
