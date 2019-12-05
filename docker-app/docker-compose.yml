@@ -51,7 +51,7 @@ services:
         - DB_USER=rl-user
         - IN_CONTAINER=True
         - DB_PASSWORD=rl-specialpassword
-        - DB_SERVER=rl-database
+        - DB_SERVER=192.168.200.4
         - DB_NAME=rl-database
         - LC_ALL=C.UTF-8
         - LANG=C.UTF-8
