@@ -30,6 +30,13 @@ RUN useradd -ms /bin/bash rl-user
 
 RUN mkdir -p /home/rl-user/rl-app/rl-images
 
+RUN pip3 install mysqlclient
+RUN pip3 install flask
+RUN pip3 install flask_migrate
+RUN pip3 install flask-sqlalchemy
+RUN pip3 install mysql-connector-python
+RUN pip3 install sqlalchemy
+
 COPY --chown=rl-user:rl-user ./rl-images/* /home/rl-user/rl-app/rl-images/
 COPY --chown=rl-user:rl-user run.py /home/rl-user/rl-app/run.py
 COPY --chown=rl-user:rl-user init.sh /home/rl-user/rl-app/init.sh
