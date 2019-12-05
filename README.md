@@ -83,9 +83,28 @@ This will generate a `build/` folder which contains all the assets that need to 
 
 ### 📦 Database
 
-TODO
+There is one schema in the database named `images` that is created at deployment using SQLAlchemy ORM.
+Database connection details such as server name, username, password are retrieved from environment variables defined in `docker-compose` file.
+
+```bash
+cd docker-app
+docker-compose build rl-database
+docker-compose up -d rl-database
+```
 
 ### 🚚 Backend API
 
-TODO
+The entire logic (incuding the database Models) resides in `run.py` script.
 
+In `backend-context` the entrypoint script `init.sh`:
+
+* install the `Python` packages,
+* apply the migrations, 
+* run the `init_db.py` that adds default entries in the database
+* and in the end it starts the application.
+
+```bash
+cd docker-app
+docker-compose build rl-backend
+docker-compose up -d rl-backend
+```
