@@ -7,9 +7,10 @@ pip3 install flask-sqlalchemy
 pip3 install mysql-connector-python
 pip3 install sqlalchemy
 
-# Not necessary
-#flask db init
-#flask db migrate
-#flask db upgrade
+flask db init
+flask db migrate
+flask db upgrade
 
-python3 app.py
+python3 init_db.py
+
+python3 run.py
