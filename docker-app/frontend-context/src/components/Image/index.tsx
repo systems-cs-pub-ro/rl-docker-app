@@ -13,15 +13,15 @@ export interface IImageElementProps {
 
 export default class ImageElement extends React.Component<IImageElementProps> {
   like = async () => {
-    await likePhoto(this.props.data.name)
+    await likePhoto(this.props.data.id)
   }
 
   public render() {
     const { data } = this.props
     return (
-      <div className='Image' onClick={this.like}>
-        <img src={`/api/image?id=${data.id}`} alt='' />
-        <div className='likes'>
+      <div className='Image'>
+        <img src={`/api/image?id=${data.id}`} alt='' onClick={() => window.open(`/api/image?id=${data.id}`,'_blank')} />
+        <div className='likes' onClick={this.like}>
           <span role='img' aria-label=''>💗</span>
           {data.likesCount}
         </div>

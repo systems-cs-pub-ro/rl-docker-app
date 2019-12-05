@@ -14,13 +14,19 @@ from flask import send_from_directory
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 
-DB_URI = 'mysql://rl-user:rl-specialpassword@127.0.0.1/rl-database'
-#DB_URI = 'mysql://%s:%s@%s/%s' % (
-#    os.environ["DB_USER"],
-#    os.environ["DB_PASSWORD"],
-#    os.environ["DB_SERVER"],
-#    os.environ["DB_NAME"],
-#)
+
+if os.environ.get('IN_CONTAINER'):
+
+    DB_URI = 'mysql://%s:%s@%s/%s' % (
+        os.environ["DB_USER"],
+        os.environ["DB_PASSWORD"],
+        os.environ["DB_SERVER"],
+        os.environ["DB_NAME"],
+    )
+
+else:
+    DB_URI = 'mysql://rl-user:rl-specialpassword@127.0.0.1/rl-database'
+
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = DB_URI
@@ -60,11 +66,15 @@ def upload_image():
 @app.route('/api/image/like', methods=['POST'])
 def like_image():
 
-    image_name = request.json['name']
-        
-    image = Image.query.filter_by(name=image_name).first()
-    image.likes_count += 1
-    db.session.commit()
+    try:
+        image_id = request.json.get('id')
+            
+        image = Image.query.filter_by(id=image_id).first()
+        image.likes_count += 1
+        db.session.commit()
+
+    except Exception:
+        return json.dumps({"status": "error"})
 
     return json.dumps({"status": "succes"})
 
@@ -72,8 +82,8 @@ def like_image():
 @app.route('/api/image/likes', methods=['GET'])
 def get_image_likes():
 
-    image_name = request.args.get('name')
-    image = Image.query.filter_by(name=image_name).first()
+    image_id = request.args.get('id')
+    image = Image.query.filter_by(id=image_id).first()
 
     return jsonify(image.likes_count)
 
@@ -107,6 +117,7 @@ def get_images_list():
         }
         for image in 
         Image.query.order_by(Image.pub_date.desc())
+        if image.name and os.path.exists(DIR_PATH + '/' + image.name)
     ])
 
 

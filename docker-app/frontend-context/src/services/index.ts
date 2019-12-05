@@ -10,9 +10,9 @@ export async function getImages(): Promise<Image[]> {
   }
 }
 
-export async function likePhoto(name: string) {
+export async function likePhoto(id: number) {
   try {
-    await Axios.post('/api/image/like', { name })
+    await Axios.post('/api/image/like', { id })
   } catch (e) {
     throw new Error(e)
   }
