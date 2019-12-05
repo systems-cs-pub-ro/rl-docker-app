@@ -75,6 +75,7 @@ In order to build the frontend application, run the following commands:
 
 ```bash
 cd docker-app/frontend-context
+yarn # or npm install - to install files
 yarn build # or npm run build
 ```
 
