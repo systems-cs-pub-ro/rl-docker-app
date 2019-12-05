@@ -1,4 +1,4 @@
-import { Image } from './types'
+import { Image, NodeResponse } from './types'
 import Axios from 'axios'
 
 export async function getImages(): Promise<Image[]> {
@@ -17,3 +17,14 @@ export async function likePhoto(id: number) {
     throw new Error(e)
   }
 }
+
+export async function getBackendNode(): Promise<NodeResponse>{
+  try {
+    const response = await Axios.get('/api/backendNode')
+    return response.data as NodeResponse
+  } catch (e) {
+    throw new Error(e)
+  }
+}
+
+

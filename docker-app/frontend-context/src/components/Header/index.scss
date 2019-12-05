@@ -24,4 +24,22 @@ header {
   iframe {
     display: none;
   }
+
+  .text {
+    display: flex;
+    align-items: center;
+
+    h1,
+    h2 {
+      margin: 0;
+      padding: 0;
+    }
+
+    h2 {
+      margin-left: 10px;
+      font-size: 14px;
+      font-weight: 400;
+      color: rgba(black, 0.5);
+    }
+  }
 }

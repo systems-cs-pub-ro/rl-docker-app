@@ -6,14 +6,28 @@ import './index.scss'
 import * as React from 'react';
 import logo from './RL_Logo.png'
 import { Button } from '../Button';
+import {getBackendNode} from '../../services'
 
 export interface IHeaderProps {
 }
 
-export default class Header extends React.Component<IHeaderProps> {
+export interface IHeaderState {
+    nodeId: string
+}
+
+export default class Header extends React.Component<IHeaderProps, IHeaderState> {
+
+  state: IHeaderState = {
+    nodeId: 'N/A'
+  }
 
   inputRef: HTMLInputElement | null = null
   submitRef: HTMLInputElement | null = null
+
+  componentDidMount = async () => {
+    const {backendNode} = await getBackendNode()
+    this.setState({nodeId: backendNode}) 
+  }
 
   triggerFileInput = () => {
     if (this.inputRef === null) {
@@ -40,7 +54,10 @@ export default class Header extends React.Component<IHeaderProps> {
           Adaugă valoare
           <span aria-label='up' role='img'>🔼</span>
         </Button>
-        <h1>Relestagram</h1>
+        <div className='text'>
+          <h1>Relestagram</h1>
+          <h2>Node: {this.state.nodeId}</h2>
+        </div>
         <form
           action="/api/upload/image"
           method="POST"

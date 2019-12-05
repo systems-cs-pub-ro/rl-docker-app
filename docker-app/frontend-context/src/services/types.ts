@@ -4,3 +4,7 @@ export type Image = {
   name: string
   publicationDate: string
 }
+
+export type NodeResponse = {
+  backendNode: string
+}

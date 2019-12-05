@@ -122,5 +122,10 @@ def get_images_list():
     ])
 
 
+@app.route('/api/backendNode', methods=['GET'])
+def get_backend_node():
+    return jsonify({"backendNode": "FIRST_NODE"})
+
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
