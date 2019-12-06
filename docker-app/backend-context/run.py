@@ -35,7 +35,10 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
-DIR_PATH = 'rl-images'
+IMAGES_PATH = 'rl-images'
+
+UPLOADED_IMAGES_PATH = IMAGES_PATH + '/upload'
+PREDEFINED_IMAGES_PATH = IMAGES_PATH + '/predefined'
 
 
 class Image(db.Model):
@@ -59,7 +62,7 @@ def upload_image():
     db.session.add(new_image)
     db.session.commit()
 
-    f.save(os.path.join(DIR_PATH, f.filename))
+    f.save(os.path.join(UPLOADED_IMAGES_PATH, f.filename))
     
     return json.dumps({"status": "succes"})
 
@@ -98,7 +101,11 @@ def get_image():
     image_name = image.name
 
     try:
-        return send_from_directory(DIR_PATH, filename=image_name)
+        if os.path.exists(PREDEFINED_IMAGES_PATH + '/' + image.name):
+            return send_from_directory(PREDEFINED_IMAGES_PATH, filename=image_name)
+        else:
+            return send_from_directory(UPLOADED_IMAGES_PATH, filename=image_name)
+
     except FileNotFoundError:
         abort(404)
 
@@ -118,21 +125,11 @@ def get_images_list():
         }
         for image in 
         Image.query.order_by(Image.pub_date.desc())
-        if image.name and os.path.exists(DIR_PATH + '/' + image.name)
+        if image.name and (
+            os.path.exists(PREDEFINED_IMAGES_PATH + '/' + image.name) or 
+            os.path.exists(UPLOADED_IMAGES_PATH + '/' + image.name)
+        )
     ])
-
-
-@app.route('/api/backendNode', methods=['GET'])
-def get_backend_node():
-    """
-    Return the backend node that is executing the request.
-    """
-
-    backend_node = os.environ.get("BACKEND_NODE")
-    if not backend_node:
-        backend_node = "FIRST NODE"
-
-    return jsonify({"backendNode": backend_node})
 
 
 if __name__ == '__main__':
