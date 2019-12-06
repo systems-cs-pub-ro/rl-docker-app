@@ -9,7 +9,6 @@ In order to be able to run and build this repository, you will need the followin
 * `Python 3`
 * `NodeJS > 12`
 * `Docker`
-* `docker-compose`
 
 ## 👨‍💻 Development steps
 
@@ -25,6 +24,18 @@ In order to spin up the development server, run the following commands:
 cd docker-app/frontend-context
 yarn # or npm install - To install required packages
 yarn start # or npm start - To spin up the development server
+
+# Run frontend in container
+cd frontend-context/
+yarn build
+docker build -t rl-frontend-image .
+
+docker run -d --name=rl-frontend --hostname=rl-frontend \
+    -e FRONTEND_NODE=FIRST_NODE \
+    -e BACKEND_SERVER=192.168.200.3 \
+    -p 80:80 --network=rl-network \
+    --ip=192.168.200.2 \
+    rl-frontend-image
 ```
 
 The frontend development server will run on `localhost:3000`. It will also expect the backend server to be up and running on `localhost:5000`.
@@ -34,14 +45,23 @@ The frontend development server will run on `localhost:3000`. It will also expec
 The database is a MySQL Docker container that you have to turn on before running the API. To spin it up, run the following commands:
 
 ```bash
-cd docker-app/
-docker-compose up -d rl-database
+cd database-context/
+docker run -d --name=rl-database --hostname=rl-database \
+    -e MYSQL_DATABASE=rl-database \
+    -e MYSQL_USER=rl-user \
+    -e MYSQL_PASSWORD=rl-specialpassword \
+    -e MYSQL_ROOT_PASSWORD=root \
+    -e TZ=Europe/Bucharest \
+    -p 3306:3306 \
+    --network=rl-network \
+    --ip=192.168.200.4 \
+    mysql
 ```
 
 You can also follow logs to know when the database has finished spinning up:
 
 ```bash
-docker-compose logs -f rl-database
+docker logs -f rl-database
 ```
 
 ### 🚚 Backend API
@@ -50,9 +70,13 @@ The backend API is a [`Flask`](https://www.palletsprojects.com/p/flask/) project
 
 ```bash
 cd docker-app/backend-context
-pip3 install -r requirements.txt # To install the necessary dependencies
 flask db init # This will configure a fresh database
+flask db migrate #
 flask db upgrade # This will sync up the database with the ORM models
+
+python3 init_db.py # Insert initial data about the predefined images
+
+python3 run.py # Start the application
 ```
 
 In the case that you are running a previous version of the database and need to bring it up to the most recent version, you can run the following command to execute the migrations:
@@ -84,12 +108,21 @@ This will generate a `build/` folder which contains all the assets that need to 
 ### 📦 Database
 
 There is one schema in the database named `images` that is created at deployment using SQLAlchemy ORM.
-Database connection details such as server name, username, password are retrieved from environment variables defined in `docker-compose` file.
+Database connection details such as server name, username, password are retrieved from environment variables defined at start-up.
 
 ```bash
-cd docker-app
-docker-compose build rl-database
-docker-compose up -d rl-database
+cd database-context/
+docker run -d --name=rl-database --hostname=rl-database \
+    -e MYSQL_DATABASE=rl-database \
+    -e MYSQL_USER=rl-user \
+    -e MYSQL_PASSWORD=rl-specialpassword \
+    -e MYSQL_ROOT_PASSWORD=root \
+    -e TZ=Europe/Bucharest \
+    -p 3306:3306 \
+    --network=rl-network \
+    --ip=192.168.200.4 \
+    mysql
+
 ```
 
 ### 🚚 Backend API
@@ -104,7 +137,11 @@ In `backend-context` the entrypoint script `init.sh`:
 * and in the end it starts the application.
 
 ```bash
-cd docker-app
-docker-compose build rl-backend
-docker-compose up -d rl-backend
+cd backend-context/
+docker build -t rl-backend-image .
+docker run -d --name=rl-backend --hostname=rl-backend \
+    -e DB_SERVER=192.168.200.4 \
+    -p 5000:5000 --network=rl-network \
+    --ip=192.168.200.3 \
+    rl-backend-image
 ```
