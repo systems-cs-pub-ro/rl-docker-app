@@ -20,8 +20,10 @@ export async function likePhoto(id: number) {
 
 export async function getBackendNode(): Promise<NodeResponse>{
   try {
-    const response = await Axios.get('/api/backendNode')
-    return response.data as NodeResponse
+  const response = await Axios.get('/')
+  console.log(response)
+    const id = response.headers.node
+    return {backendNode:id} as NodeResponse
   } catch (e) {
     throw new Error(e)
   }
