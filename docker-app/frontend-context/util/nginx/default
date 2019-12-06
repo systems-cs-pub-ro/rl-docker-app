@@ -8,12 +8,13 @@ server {
     # This directive redirects all requests to the index.html file,
     # as the application is a SPA
     try_files $uri $uri/ /index.html;
+    add_header Node ${FRONTEND_NODE};
   }
 
   location /api/ {
     # The /api/ route needs to redirect to the Flask API server
     # If needed, replace the address here with the Flask container's IP address.
-    proxy_pass http://192.168.200.3:5000/api/;
+    proxy_pass http://${BACKEND_SERVER}:5000/api/;
 
     # Extra proxy configuration options
     proxy_http_version 1.1;

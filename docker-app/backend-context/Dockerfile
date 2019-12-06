@@ -1,8 +1,14 @@
 FROM ubuntu:18.04
 
-ARG flask_port
-
 ENV TZ=Europe/Bucharest
+ENV LC_ALL=C.UTF-8
+ENV LANG=C.UTF-8
+
+ENV FLASK_APP=run.py
+ENV DB_USER=rl-user
+ENV IN_CONTAINER=True
+ENV DB_PASSWORD=rl-specialpassword
+ENV DB_NAME=rl-database
 
 RUN apt-get update && apt-get install -y \
     gcc \
@@ -51,4 +57,4 @@ WORKDIR /home/rl-user/rl-app/
 
 ENTRYPOINT ["/home/rl-user/rl-app/init.sh"]
 
-EXPOSE ${flask_port}
+EXPOSE 5000
