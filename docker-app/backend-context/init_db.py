@@ -9,6 +9,10 @@ filenames = os.listdir('./rl-images')
 
 for filename in filenames:
 
+    image = Image.query.filter_by(name=filename).first()
+    if image:
+        continue
+
     no_of_likes = randint(0, 20)
 
     image = Image(name=filename, likes_count=no_of_likes)
