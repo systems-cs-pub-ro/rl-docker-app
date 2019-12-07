@@ -1,3 +1,5 @@
+resolver 127.0.0.11 valid=10s;
+
 server {
   listen 80;
 
@@ -14,7 +16,8 @@ server {
   location /api/ {
     # The /api/ route needs to redirect to the Flask API server
     # If needed, replace the address here with the Flask container's IP address.
-    proxy_pass http://${BACKEND_SERVER}:5000/api/;
+	set $backend_servers ${BACKEND_SERVER};
+    proxy_pass http://$backend_servers:5000;
 
     # Extra proxy configuration options
     proxy_http_version 1.1;
