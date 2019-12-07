@@ -55,7 +55,7 @@ docker run -d --name=rl-database --hostname=rl-database \
     -p 3306:3306 \
     --network=rl-network \
     --ip=192.168.200.4 \
-    mysql
+    rl-database-image
 ```
 
 You can also follow logs to know when the database has finished spinning up:
@@ -121,7 +121,7 @@ docker run -d --name=rl-database --hostname=rl-database \
     -p 3306:3306 \
     --network=rl-network \
     --ip=192.168.200.4 \
-    mysql
+    rl-database-image
 
 ```
 
