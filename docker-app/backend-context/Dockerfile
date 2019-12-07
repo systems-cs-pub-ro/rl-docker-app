@@ -11,23 +11,10 @@ ENV DB_PASSWORD=rl-specialpassword
 ENV DB_NAME=rl-database
 
 RUN apt-get update && apt-get install -y \
-    gcc \
-    git \
-    python3 \
-    python3-pip \
-    python3-dev \
-    python3-setuptools \
-    build-essential \
-    libmysqlclient-dev \
-    libssl-dev \
-    iputils-ping \
-    net-tools \
-    iproute2 \
-    telnet \
-    netcat \
-    sudo \
-    vim \
-    curl
+    sudo gcc git build-essential \
+    python3 python3-pip python3-dev python3-setuptools \
+    mysql-client libmysqlclient-dev libssl-dev \
+    iputils-ping net-tools iproute2 telnet netcat vim curl
 
 
 RUN export CC=gcc
@@ -43,7 +30,7 @@ RUN pip3 install flask-sqlalchemy
 RUN pip3 install mysql-connector-python
 RUN pip3 install sqlalchemy
 
-COPY --chown=rl-user:rl-user ./rl-images/* /home/rl-user/rl-app/rl-images/
+COPY --chown=rl-user:rl-user ./rl-images/ /home/rl-user/rl-app/rl-images/
 COPY --chown=rl-user:rl-user run.py /home/rl-user/rl-app/run.py
 COPY --chown=rl-user:rl-user init.sh /home/rl-user/rl-app/init.sh
 COPY --chown=rl-user:rl-user init_db.py /home/rl-user/rl-app/init_db.py
