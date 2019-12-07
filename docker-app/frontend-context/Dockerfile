@@ -2,7 +2,8 @@ FROM ubuntu:18.04
 
 RUN apt-get update && apt-get install -y \
     gettext-base \
-    nginx
+    nginx \
+    iputils-ping net-tools iproute2 telnet netcat vim curl
 
 COPY util/nginx/nginx.conf /etc/nginx/nginx.conf
 COPY util/nginx/default /etc/nginx/sites-available/
