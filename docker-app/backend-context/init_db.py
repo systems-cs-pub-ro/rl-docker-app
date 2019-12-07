@@ -5,7 +5,7 @@ from random import randint
 from run import Image
 from run import db
 
-filenames = os.listdir('./rl-images')
+filenames = os.listdir('./rl-images/predefined/')
 
 for filename in filenames:
 

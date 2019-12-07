@@ -42,6 +42,8 @@ RUN chown -R rl-user:rl-user /home/rl-user/rl-app
 
 WORKDIR /home/rl-user/rl-app/
 
+RUN mkdir -p rl-images/upload/ && chown rl-user:rl-user rl-images/upload/
+
 ENTRYPOINT ["/home/rl-user/rl-app/init.sh"]
 
 EXPOSE 5000
