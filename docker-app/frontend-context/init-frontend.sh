@@ -1,5 +1,9 @@
 #!/bin/bash
 
+if [[ -z "$FRONTEND_NODE" ]]; then
+	FRONTEND_NODE=$(hostname)
+fi
+
 export FRONTEND_NODE
 export BACKEND_SERVER
 
